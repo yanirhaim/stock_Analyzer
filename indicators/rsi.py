@@ -7,7 +7,7 @@ import numpy as np
 def rsi_status(df, period):
     period = period  # Value of the RSI period
 
-    # Creating a function where it will store the value of change per day, but just the ones that are increasing, on a df
+    # Creating a function where it will store the value of change per day, but just the ones that are increasing on a df
     def upward_c(close_p):
         mask = (close_p - close_p.shift(1)) > 0  # Condition for looking just increasing change per day
         v1 = close_p - close_p.shift(1)  # In case it is increasing it will store this value
@@ -16,7 +16,7 @@ def rsi_status(df, period):
 
     upward_c(df['Close'])  # Calling the function with the Close Values
 
-    # Creating a function where it will store the value of change per day, but just the ones that are decreasing, on a df
+    # Creating a function where it will store the value of change per day, but just the ones that are decreasing on a df
     def downward_c(close_p):
         mask = (close_p - close_p.shift(1)) < 0  # Condition for looking just decreasing change per day
         v1 = (close_p - close_p.shift(1))*-1  # In case it is decreasing it will store this value
@@ -63,7 +63,8 @@ def rsi_status(df, period):
 
     df['RSI'] = rsi(df['RS'])  # Storing the list of values of the RSI on a df
 
-    # The next part is to create a function wich allow as to know if whats the status of the stock, for this we would define like this:
+    # The next part is to create a function wich allow as to know if whats the status of the stock, for this we would
+    # define like this:
     # 10 means Overbought
     # 11 means UpwardTrend
     # 20 means Oversold
@@ -83,7 +84,8 @@ def rsi_status(df, period):
             df['Status'][x] = 90
             x += 1
 
-        # For loop to find the values that are below 30 and assign them a value of 20, in case they aren't, it will remain the same
+        # For loop to find the values that are below 30 and assign them a value of 20, in case they aren't, it will
+        # remain the same
         x = 0
         for item in df['Status']:
             if item == 10:

@@ -6,6 +6,7 @@ import requests
 import json
 import pandas as pd
 from indicators.rsi import rsi_status
+from indicators.sma import sma_status
 
 ticker = 'AAPL'  # Add company ticker for looking data
 
@@ -32,5 +33,10 @@ df = pd.DataFrame(close, index=dates, columns=['Close'])
 
 # Get RSI analysis from the stock
 rsi_analysis = rsi_status(df=df, period=14)
-print("RSI Analysis: {}".format(rsi_analysis))
 
+# Get the SMA analysis from the stock
+sma_analysis = sma_status(df=df, ma1=50, ma2=200)
+
+print("<------------------STOCK  TECHNICAL ANALYSIS-------------------->")
+print("RSI ANALYSIS: {}".format(rsi_analysis))
+print("SMA ANALYSIS: {}".format(sma_analysis))
