@@ -2,11 +2,16 @@
 # Created by Yanir Haim
 
 # Libraries required
+import warnings
+import matplotlib.pyplot as plt
 import requests
 import json
 import pandas as pd
 from indicators.rsi import rsi_status
 from indicators.sma import sma_status
+
+# Skip warnings
+warnings.simplefilter(action='ignore', category=FutureWarning)
 
 ticker = 'AAPL'  # Add company ticker for looking data
 
@@ -35,8 +40,27 @@ df = pd.DataFrame(close, index=dates, columns=['Close'])
 rsi_analysis = rsi_status(df=df, period=14)
 
 # Get the SMA analysis from the stock
-sma_analysis = sma_status(df=df, ma1=50, ma2=200)
+ma1 = 50  # First Moving Average
+ma2 = 200  # Second Moving Average
+sma_analysis = sma_status(df=df, ma1=ma1, ma2=ma2)
 
 print("<------------------STOCK  TECHNICAL ANALYSIS-------------------->")
 print("RSI ANALYSIS: {}".format(rsi_analysis))
 print("SMA ANALYSIS: {}".format(sma_analysis))
+
+fig = plt.figure(figsize=(14, 8))
+# RSI CHART
+rsi = fig.add_axes([0.1, 0.1, 0.8, 0.3])
+rsi.plot(df['RSI'])
+rsi.plot([df.index[0], df.index[-1]], [70, 70], color='red', linestyle='--')
+rsi.plot([df.index[0], df.index[-1]], [30, 30], color='green', linestyle='--')
+
+# STOCK CHART
+stock = fig.add_axes([0.1, 0.4, 0.8, 0.5])
+stock.plot(df['Close'])
+stock.plot(df['{} Daily - SMA'.format(ma1)])
+stock.plot(df['{} Daily - SMA'.format(ma2)])
+stock.set_title("{} STOCK CHART".format(ticker))
+
+plt.show()
+

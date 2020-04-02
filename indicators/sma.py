@@ -1,6 +1,6 @@
 def sma_status(df, ma1, ma2):
-    df['50 Daily - SMA'] = df['Close'].rolling(window=ma1).mean()  # moving average 6
-    df['200 Daily - SMA'] = df['Close'].rolling(window=ma2).mean()  # moving average 12
+    df['{} Daily - SMA'.format(ma1)] = df['Close'].rolling(window=ma1).mean()  # moving average 6
+    df['{} Daily - SMA'.format(ma2)] = df['Close'].rolling(window=ma2).mean()  # moving average 12
     df['Position'] = df['50 Daily - SMA'] > df['200 Daily - SMA']  # look the position between the SMA50 and SMA20
 
     cut_up = (df['Position'].shift(1) == False) & (df['Position'] == True)  # Places where the SMAs cut UP
