@@ -4,6 +4,7 @@
 # Libraries required
 import numpy as np
 
+
 def rsi_status(df, period):
     period = period  # Value of the RSI period
 
@@ -19,7 +20,7 @@ def rsi_status(df, period):
     # Creating a function where it will store the value of change per day, but just the ones that are decreasing on a df
     def downward_c(close_p):
         mask = (close_p - close_p.shift(1)) < 0  # Condition for looking just decreasing change per day
-        v1 = (close_p - close_p.shift(1))*-1  # In case it is decreasing it will store this value
+        v1 = (close_p - close_p.shift(1)) * -1  # In case it is decreasing it will store this value
         v2 = 0  # In case it is not decreasing it will store this value
         df['Downward change'] = np.where(mask, v1, v2)  # Assigning the condition to the df, to assign the values
 
@@ -34,20 +35,21 @@ def rsi_status(df, period):
         while y != period:
             avm.append(np.nan)
             y += 1
-        while x != period+1:
+        while x != period + 1:
             f_value += change[x]
             x += 1
-        f_value = f_value/period
+        f_value = f_value / period
         avm.append(f_value)
-        for up_ch in change[period+1:]:
-            avm.append(((f_value*(period-1))+up_ch)/period)
-            f_value = ((f_value*(period-1))+up_ch)/period
+        for up_ch in change[period + 1:]:
+            avm.append(((f_value * (period - 1)) + up_ch) / period)
+            f_value = ((f_value * (period - 1)) + up_ch) / period
         return avm
 
     df['Average UM'] = av_m(df['Upward change'])  # Getting the average upward movement values and storing them on a df
-    df['Average DM'] = av_m(df['Downward change'])  # Getting the average downward movement values and storing them on a df
+    df['Average DM'] = av_m(df['Downward change'])  # Getting the average downward movement values and storing them on a
+                                                    # df
 
-    df['RS'] = df['Average UM']/df['Average DM']  # Getting the Relative Strength, and storing the values on a df
+    df['RS'] = df['Average UM'] / df['Average DM']  # Getting the Relative Strength, and storing the values on a df
 
     # Function to obtain the Relative Strength index from the RS values, and returning a list.
     def rsi(rs):
@@ -57,7 +59,7 @@ def rsi_status(df, period):
             rsi_l.append(np.nan)
             x += 1
         for val in rs[period:]:
-            rsi_l.append(100-(100/(val+1)))
+            rsi_l.append(100 - (100 / (val + 1)))
 
         return rsi_l
 
@@ -120,16 +122,16 @@ def rsi_status(df, period):
             elif item == 20:
                 df['Status'][x] = item
                 x += 1
-            elif (item != 10) & (df['Status'][x-1] == 10):
+            elif (item != 10) & (df['Status'][x - 1] == 10):
                 df['Status'][x] = 22
                 x += 1
-            elif (item != 10) & (df['Status'][x-1] == 22):
+            elif (item != 10) & (df['Status'][x - 1] == 22):
                 df['Status'][x] = 22
                 x += 1
-            elif (item != 20) & (df['Status'][x-1] == 20):
+            elif (item != 20) & (df['Status'][x - 1] == 20):
                 df['Status'][x] = 11
                 x += 1
-            elif (item != 20) & (df['Status'][x-1] == 11):
+            elif (item != 20) & (df['Status'][x - 1] == 11):
                 df['Status'][x] = 11
                 x += 1
             else:
