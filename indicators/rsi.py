@@ -1,9 +1,4 @@
-# Relative strength index
-# Created by Yanir Haim
-
-# Libraries required
 import numpy as np
-
 
 def rsi_status(df, period):
     period = period  # Value of the RSI period
