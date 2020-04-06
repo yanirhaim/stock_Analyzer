@@ -11,18 +11,24 @@ from indicators.rsi import rsi_status
 from indicators.sma import sma_status
 from indicators.bollinger_b import bollinger_b_status
 from stock_data import get_stock
+from indicators.rsiP import rsi_percent
 
 # Skip warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
 ticker = 'AAPL'  # Company ticker for looking data
-startdate = '2015-01-01'  # Start-date of the stock data YY/MM/DD
+start_date = '' # Start date of stock data, must be YY-MM-DD
+end_date = '' # End date of stock data, must be YY-MM-DD
 
-df = get_stock('AAPL')
+# Get the stock data as pandas dataframe
+df = get_stock(ticker) # Data starting from 2015-01-01 to today's date
+
+# df = get_stock('AAPL') # Data between days selected
 
 # Get RSI analysis from the stock
 period = 14
 rsi_analysis = rsi_status(df=df, period=period)
+rsi_percent = rsi_percent(df=df, period=period)
 
 # Get the SMA analysis from the stock
 ma1 = 50  # First Moving Average
@@ -33,10 +39,15 @@ sma_analysis = sma_status(df=df, ma1=ma1, ma2=ma2)
 b_period = 20
 bollinger_b_status(df=df, period=b_period)
 
-print("<------------------STOCK  TECHNICAL ANALYSIS-------------------->")
-print("RSI ANALYSIS: {}".format(rsi_analysis))
-print("SMA ANALYSIS: {}".format(sma_analysis))
-print(df['adjClose'])
+print("|------------------STOCK  TECHNICAL ANALYSIS--------------------|")
+print("")
+print("|------------------% RSI TECHNICAL ANALYSIS %-------------------|")
+print("| RSI TREND: {}                   |".format(rsi_analysis)) 
+print("| RSI PERCENTAGE: BUY: {}% | SELL: {}%                      |".format(round(rsi_percent,2), round(100 - rsi_percent,2)))
+print("")
+print("|------------------% SMA TECHNICAL ANALYSIS %-------------------|")
+print("| SMA ANALYSIS: {}".format(sma_analysis))
+
 
 # Plotting the Chart
 fig = plt.figure(figsize=(14, 8))
