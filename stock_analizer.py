@@ -10,36 +10,15 @@ import pandas as pd
 from indicators.rsi import rsi_status
 from indicators.sma import sma_status
 from indicators.bollinger_b import bollinger_b_status
+from stock_data import get_stock
 
 # Skip warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
-ticker = 'AAPL'  # Add company ticker for looking data
-startdate = '2015-01-01'
+ticker = 'AAPL'  # Company ticker for looking data
+startdate = '2015-01-01'  # Start-date of the stock data YY/MM/DD
 
-# Get stock data from URL
-data = requests.get("https://fmpcloud.io/api/v3/historical-price-full/" + ticker + "?from=" + startdate + "2&apikey=demo")
-# Load the Content of the data that is in a json file
-data = json.loads(data.content)
-data = data['historical']  # Because it is in a dictionary, we have to look for the 'historical' content
-
-dates = []  # List where we are going to save the dates values
-close = []  # List where we are going to save the close values
-adjClose = []
-
-# ForLoop for saving the data into the lists
-for item in data:
-    dates.append(pd.to_datetime(item['date']))  # getting the date as a pandas time-series
-    close.append(float(item['close']))  # getting the close price as a float
-    adjClose.append(float(item['adjClose']))  # getting the close price as a float
-
-# Reversing the content of the list, because we don't want the last close as our first value
-close.reverse()
-dates.reverse()
-adjClose.reverse()
-
-# Creating a pandas DataFrame with the values
-df = pd.DataFrame(list(zip(close, adjClose)), index=dates, columns=['Close', 'adjClose'])
+df = get_stock('AAPL')
 
 # Get RSI analysis from the stock
 period = 14
